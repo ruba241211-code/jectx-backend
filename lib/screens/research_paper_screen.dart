@@ -5,10 +5,12 @@ class ResearchPaperScreen extends StatefulWidget {
   const ResearchPaperScreen({super.key});
 
   @override
- State<ResearchPaperScreen> createState() => _ResearchPaperScreenState();
+  State<ResearchPaperScreen> createState() =>
+      _ResearchPaperScreenState();
 }
 
-class _ResearchPaperScreenState extends State<ResearchPaperScreen> {
+class _ResearchPaperScreenState
+    extends State<ResearchPaperScreen> {
 
   final TextEditingController searchController =
       TextEditingController();
@@ -17,27 +19,25 @@ class _ResearchPaperScreenState extends State<ResearchPaperScreen> {
 
   bool loading = false;
 
-Future<void> searchPapers() async {
-  if (searchController.text.trim().isEmpty) {
-    return;
+  Future<void> searchPapers() async {
+    if (searchController.text.trim().isEmpty) {
+      return;
+    }
+
+    setState(() {
+      loading = true;
+    });
+
+    final result = await ResearchService.searchPapers(
+      searchController.text.trim(),
+    );
+
+    setState(() {
+      papers = result;
+      loading = false;
+    });
   }
 
-  setState(() {
-    loading = true;
-  });
-
-  final result = await ResearchService.searchPapers(
-    searchController.text.trim(),
-  );
-
-  print("Flutter received:");
-  print(result);
-
-  setState(() {
-    papers = result;
-    loading = false;
-  });
-}
   @override
   Widget build(BuildContext context) {
 
@@ -82,9 +82,7 @@ Future<void> searchPapers() async {
 
                 onPressed: searchPapers,
 
-                child: const Text(
-                  "Search Papers",
-                ),
+                child: const Text("Search Papers"),
 
               ),
 
@@ -102,17 +100,10 @@ Future<void> searchPapers() async {
                 child: papers.isEmpty
 
                     ? const Center(
-
                         child: Text(
-
                           "Search a project to view research papers.",
-
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-
+                          style: TextStyle(fontSize: 16),
                         ),
-
                       )
 
                     : ListView.builder(
@@ -125,13 +116,11 @@ Future<void> searchPapers() async {
 
                           return Card(
 
-                            margin:
-                                const EdgeInsets.only(bottom: 12),
+                            margin: const EdgeInsets.only(bottom: 12),
 
                             child: Padding(
 
-                              padding:
-                                  const EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(15),
 
                               child: Column(
 
@@ -142,7 +131,7 @@ Future<void> searchPapers() async {
 
                                   Text(
 
-                                    paper["title"],
+                                    paper["title"] ?? "No Title",
 
                                     style: const TextStyle(
 
@@ -156,17 +145,17 @@ Future<void> searchPapers() async {
                                   ),
 
                                   const SizedBox(height: 8),
-
                                   Text(
-                                    "👤 Authors: ${paper["authors"]}",
+                                    "👤 Authors: ${(paper["authors"] as List?)?.join(", ") ?? "Unknown"}",
                                   ),
-
                                   Text(
                                     "📅 Year: ${paper["year"]}",
                                   ),
 
+                                  const SizedBox(height: 8),
+
                                   Text(
-                                    "🏷 Topic: ${paper["topic"]}",
+                                    "🔗 ${paper["url"]}",
                                   ),
 
                                 ],

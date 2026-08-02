@@ -9,14 +9,11 @@ class IdeaGeneratorScreen extends StatefulWidget {
       _IdeaGeneratorScreenState();
 }
 
-class _IdeaGeneratorScreenState
-    extends State<IdeaGeneratorScreen> {
-
+class _IdeaGeneratorScreenState extends State<IdeaGeneratorScreen> {
   String selectedField = "AI";
   String selectedLevel = "Beginner";
 
   bool isLoading = false;
-
   String result = "";
 
   final List<String> fields = [
@@ -37,23 +34,33 @@ class _IdeaGeneratorScreenState
   ];
 
   Future<void> generateIdeas() async {
-
     setState(() {
       isLoading = true;
       result = "";
     });
 
-    String response =
-    await AIService.generateProjectIdea(
-  selectedField,
-  selectedLevel,
-);
+    try {
+      String response = await AIService.generateProjectIdea(
+        selectedField,
+        selectedLevel,
+      );
 
-    setState(() {
-      result = response;
-      isLoading = false;
-    });
+      if (!mounted) return;
+
+      setState(() {
+        result = response;
+        isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        result = "Error: $e";
+        isLoading = false;
+      });
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +72,6 @@ class _IdeaGeneratorScreenState
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-
             const Text(
               "Project Field",
               style: TextStyle(
@@ -82,7 +88,7 @@ class _IdeaGeneratorScreenState
                 border: OutlineInputBorder(),
               ),
               items: fields.map((field) {
-                return DropdownMenuItem(
+                return DropdownMenuItem<String>(
                   value: field,
                   child: Text(field),
                 );
@@ -112,7 +118,7 @@ class _IdeaGeneratorScreenState
                 border: OutlineInputBorder(),
               ),
               items: levels.map((level) {
-                return DropdownMenuItem(
+                return DropdownMenuItem<String>(
                   value: level,
                   child: Text(level),
                 );
@@ -158,7 +164,7 @@ class _IdeaGeneratorScreenState
                   ),
                 ),
               ),
-              ],
+          ],
         ),
       ),
     );

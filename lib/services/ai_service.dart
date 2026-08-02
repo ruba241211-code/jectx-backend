@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class AIService {
 
-static const String baseUrl = "http://192.168.186.108:8000";
+static const String baseUrl = "http://10.29.174.108:8000";
   static Future<String> generateProjectIdea(
     String field,
     String level,
