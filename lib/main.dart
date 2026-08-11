@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
-  runApp(const JectxApp());
+  runApp(const JECTXApp());
 }
 
-class JectxApp extends StatelessWidget {
-  const JectxApp({super.key});
+class JECTXApp extends StatelessWidget {
+  const JECTXApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  LoginScreen(),
+      title: 'JECTX',
+      home: const SplashScreen(),
     );
   }
 }

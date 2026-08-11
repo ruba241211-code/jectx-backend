@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+
 class ResearchService {
-  static const String baseUrl = "http://192.168.186.108:8000";
+  static const String baseUrl = "https://jectx-backend.onrender.com";
 
   static Future<List<dynamic>> searchPapers(String project) async {
     try {
